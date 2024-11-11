@@ -12,6 +12,10 @@
         <param-name>jakarta.faces.ENABLE_WEBSOCKET_ENDPOINT</param-name>
         <param-value>true</param-value>
     </context-param>
+    <context-param>
+        <param-name/>
+        <param-value/>
+    </context-param>
     <servlet>
         <servlet-name>FacesServlet</servlet-name>
         <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>

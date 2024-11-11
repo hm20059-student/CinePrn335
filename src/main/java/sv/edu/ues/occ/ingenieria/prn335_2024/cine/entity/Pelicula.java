@@ -1,18 +1,29 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 
 @Entity
 @Table(name = "pelicula", schema = "public")
+
+@NamedQueries({
+        @NamedQuery(name = "Pelicula.findAll", query = "SELECT p FROM Pelicula p"),
+        @NamedQuery(name = "Pelicula.countAll", query = "SELECT Count(p) FROM Pelicula p"),
+        @NamedQuery(name = "Pelicula.findByIdPelicula", query = "SELECT p FROM Pelicula p WHERE p.idPelicula = :idPelicula"),
+        @NamedQuery(name = "Pelicula.findByNombre", query = "SELECT p FROM Pelicula p WHERE p.nombre = :nombre"),
+        @NamedQuery(name = "Pelicula.findBySinopsis", query = "SELECT p FROM Pelicula p WHERE p.sinopsis = :sinopsis")
+})
+
 public class Pelicula implements Serializable {
     @Id
     @Column(name = "id_pelicula", nullable = false)
     private Long idPelicula;
 
-    @Size(max = 255)
+    @NotBlank
+    @Size(max = 255, min = 5)
     @Column(name = "nombre")
     private String nombre;
 

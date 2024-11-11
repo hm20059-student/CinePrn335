@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: hdz
+  Date: 9/11/24
+  Time: 4:22
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:p="primefaces"
+                xmlns:crud="jakarta.faces.composite/crud"
+                template="principal.xhtml"
+>
+    <ui:define name="titulo">
+        #{frmTipoSala.tituloPagina}
+    </ui:define>
+
+    <ui:define name="cuerpo">
+        <h:panelGrid>
+            <h:panelGrid>
+                <h:panelGroup id="pnlTabla">
+                    <h:form id="frmTabla">
+                        <p:dataTable value="#{frmTipoSala.modelo}" var="r"
+                                     lazy="true"
+                                     paginator="true"
+                                     rows="5"
+                                     first="0"
+                                     selectionMode="single"
+                                     selection="#{frmTipoSala.registro}"
+                                     rendered="#{empty frmTipoSala.registro}"
+                        >
+                            <p:ajax process="@this" update=":pnlDetalle @form"
+                                    event="rowSelect" listener="#{frmTipoSala.selecFila}"/>
+                            <p:column headerText="ID">
+                                <h:outputText value="#{r.idTipoSala}"/>
+                            </p:column>
+                            <p:column headerText="NOMBRE">
+                                <h:outputText value="#{r.nombre}"/>
+                            </p:column>
+                            <p:column headerText="ACTIVO">
+                                <h:outputText value="#{r.activo?'ACTIVO':'INACTIVO'}"/>
+                            </p:column>
+                            <p:column headerText="COMENTARIOS">
+                                <h:outputText value="#{r.comentarios}"/>
+                            </p:column>
+                            <p:column headerText="EXPRESION REGULAR">
+                                <h:outputText value="#{r.expresionRegular}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                        <h:panelGrid>
+                            <p:commandButton value="CANCELAR" rendered="#{frmTipoSala.estado ne 'NINGUNO'}"
+                                             update=":pnlDetalle @form"
+                                             actionListener="#{frmTipoSala.btnCancelarHandler}"/>
+                            <p:commandButton value="NUEVO" update=":pnlDetalle @form"
+                                             actionListener="#{frmTipoSala.btnNuevoHandler}"/>
+
+                        </h:panelGrid>
+
+                        <p:growl id="growl" showDetail="true" sticky="false" life="1500"/>
+                    </h:form>
+                </h:panelGroup>
+            </h:panelGrid>
+        </h:panelGrid>
+
+        <h:panelGroup id="pnlDetalle">
+            <h:form rendered="#{not empty frmTipoSala.registro}" id="frmDetalle">
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="ID" for="txtid"/>
+                    <p:inputText id="txtid" value="#{frmTipoSala.registro.idTipoSala}" readonly="true" disabled="true"/>
+
+                    <p:outputLabel value="Nombre" for="txtNombre"/>
+                    <p:inputText id="txtNombre" value="#{frmTipoSala.registro.nombre}" size="70"/>
+
+                    <p:outputLabel value="Activo" for="chkActivo"/>
+                    <p:selectBooleanCheckbox id="chkActivo" value="#{frmTipoSala.registro.activo}" size="70"/>
+
+                    <p:outputLabel value="Comentarios" for="txtComentarios"/>
+                    <p:inputText id="txtComentarios" value="#{frmTipoSala.registro.comentarios}" size="70"/>
+
+                    <p:outputLabel value="ExpresionRegular" for="txtExpresionRegular"/>
+                    <p:inputText id="txtExpresionRegular" value="#{frmTipoSala.registro.expresionRegular}" size="70"/>
+
+                </h:panelGrid>
+                <h:panelGrid columns="3">
+                    <p:commandButton value="GUARDAR" rendered="#{frmTipoSala.estado=='CREAR'}"
+                                     update=":frmTabla  :pnlDetalle @form"
+                                     actionListener="#{frmTipoSala.btnGuardarHandler}"/>
+                    <p:commandButton value="MODIFICAR" rendered="#{frmTipoSala.estado=='MODIFICAR'}"
+                                     update=":frmTabla :pnlDetalle @form"
+                                     actionListener="#{frmTipoSala.btnModificarHandler}"/>
+                    <p:commandButton value="ELIMINAR" rendered="#{frmTipoSala.estado=='MODIFICAR'}"
+                                     update=":frmTabla  :pnlDetalle @form"
+                                     actionListener="#{frmTipoSala.btneEliminarHandler}"/>
+                </h:panelGrid>
+            </h:form>
+        </h:panelGroup>
+    </ui:define>
+
+</ui:composition>

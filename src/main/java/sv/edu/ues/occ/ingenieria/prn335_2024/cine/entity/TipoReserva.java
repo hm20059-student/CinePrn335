@@ -12,7 +12,7 @@ public class TipoReserva implements Serializable {
     @Id
     @Column(name = "id_tipo_reserva", nullable = false)
     private Integer idTipoReserva;
-@NotBlank
+    @NotBlank
     @Size(max = 155, min = 3)
     @Column(name = "nombre", length = 155)
     private String nombre;

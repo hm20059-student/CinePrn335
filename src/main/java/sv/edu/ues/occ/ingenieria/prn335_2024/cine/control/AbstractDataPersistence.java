@@ -113,8 +113,9 @@ public abstract class AbstractDataPersistence<T> {
     }
 
     public List<T> findRange(int first, int max) throws IllegalStateException, IllegalArgumentException {
-        return findRange(first, max, "",""); // Llama al método con orden como cadena vacía
+        return findRange(first, max, "", ""); // Llama al método con orden como cadena vacía
     }
+
     public List<T> findRange(int first, int pageSize, String ordenar, String direccion) throws IllegalArgumentException, IllegalStateException {
 //        List<T> resultado = null;
         if (first < 0 || pageSize <= 0) {
@@ -147,7 +148,6 @@ public abstract class AbstractDataPersistence<T> {
                             cq.orderBy(cb.asc(raiz.get(ordenar))); // Orden ascendente
                         }
                     }
-
                     q.setFirstResult(first);
                     q.setMaxResults(pageSize);
                     return q.getResultList();

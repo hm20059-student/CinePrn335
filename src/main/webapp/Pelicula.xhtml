@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: hdz
+  Date: 9/11/24
+  Time: 5:49
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+               xmlns:h="jakarta.faces.html"
+               xmlns:p="primefaces"
+               xmlns:crud="jakarta.faces.composite/crud"
+               template="principal.xhtml"
+>
+        <ui:define name="titulo">
+            #{frmPelicula.tituloPagina}
+        </ui:define>
+
+    <ui:define name="cuerpo">
+        <h:panelGrid>
+            <h:panelGrid>
+                <h:panelGroup id="pnlTabla">
+                    <h:form id="frmTabla">
+                        <h:panelGrid>
+                            <p:dataTable value="#{frmPelicula.modelo}" var="r"
+                                         rows="5"
+                                         selection="#{frmPelicula.registro}"
+                                         rendered="#{frmPelicula.estado=='NINGUNO'}"
+                                         lazy="true" paginator="true" selectionMode="single"
+                            >
+                                <p:ajax event="rowSelect" update=":pnlDetalle :pnlTabla" process="@this"
+                                        listener="#{frmPelicula.selecFila}"/>
+                                <p:column headerText="ID">
+                                    <h:outputText value="#{r.idPelicula}"/>
+                                </p:column>
+                                <p:column headerText="NOMBRE">
+                                    <h:outputText value="#{r.nombre}"/>
+                                </p:column>
+                                <p:column headerText="SINOPSIS">
+                                    <h:outputText value="#{r.sinopsis}"/>
+                                </p:column>
+                            </p:dataTable>
+                            <h:panelGrid>
+                                <crud:botonesTop frm="#{frmPelicula}"/>
+                                <p:growl id="growl" showDetail="true" sticky="false" life="1500"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:form>
+                </h:panelGroup>
+            </h:panelGrid>
+            <h:panelGroup id="pnlDetalle">
+
+                <p:tabView id="tabDetalle" cache="false" dynamic="true" rendered="#{frmPelicula.estado!='NINGUNO'}">
+                    <p:tab title="Generalidades" closable="false">
+                        <h:panelGrid>
+                            <h:form id="frmDetalle" >
+                                <h:panelGrid>
+                                    <h:panelGrid columns="2">
+                                        <p:outputLabel value="ID" for="txtId"/>
+                                        <p:inputText id="txtId" disabled="true" readonly="true"
+                                                     value="#{frmPelicula.registro.idPelicula}"/>
+                                        <p:outputLabel value="NOMBRE" for="txtNombre"/>
+                                        <p:inputText id="txtNombre" value="#{frmPelicula.registro.nombre}" size="70"/>
+                                        <p:outputLabel value="SINOPSIS" for="txtSinopsis"/>
+                                        <p:inputTextarea id="txtSinopsis" value="#{frmPelicula.registro.sinopsis}"
+                                                         rows="3"
+                                                         cols="70"/>
+                                    </h:panelGrid>
+                                    <crud:botonesButton frm="#{frmPelicula}"/>
+                                </h:panelGrid>
+                            </h:form>
+                        </h:panelGrid>
+                    </p:tab>
+
+                    <p:tab title="Tipos" disabled="#{frmPelicula.estado!='MODIFICAR'}">
+                        aqui va mas info
+                    </p:tab>
+
+                </p:tabView>
+            </h:panelGroup>
+        </h:panelGrid>
+
+    </ui:define>
+</ui:composition>
